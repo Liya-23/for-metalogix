@@ -1,0 +1,9 @@
+ID	manifacture	model	releaseyear	enginetype	horsepower	transmission	exteriorcolor	interiorcolor	wheelcolor	price
+1	Ford	Mustang	2021	v6	300	Manual	Black	Red	Black	R250 000,00
+2	Toyota	Camry	2018	4-cylinder	150	Automatic	Blue	White	Black	R180 000,00
+3	BMW	i8	2019	electric	400	Automatic	Blue	Beige	Black	R200 000,00
+4	Lamborghini	Urus	2018	v8	641	Automatic	Green	Black	Black	R540 000,00
+5	Rolls-Royce	Phantom	2017	v12	563	Automatic	Red	Black	Black	R760 000,00
+6	Bentley	Continental Gt	2018	w12	626	Automatic	Purple	Black	Black	R625 000,00
+7	Mercedes Benz	S-Class	2020	v8	598	Automatic	Beige	Black	Black	R105 000,00
+8	Astorn Martin	DB11	2016	v12	630	Automatic	Pink	Black	Black	R677 000,00

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container{
+            /* max-width: 400px; */
+            margin: 0 auto;
+            background: #e27f7f;
+            padding: 20px;
+            border: 1px solid #0a0909;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+
+            cursor: pointer;
+        }
+        .buttons{
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>welcome Hero</h2>
+        
+        <div class="container">
+            <textarea name="dbdis" id="dbdis" cols="170" rows="20"></textarea>
+        </div>
+
+        <div class="buttons">
+            <form action="/CarModelsHandler" method="get">
+                <input type="button" value="View All Models">
+            </form>
+            
+            <form action="/CarModelsHandler" method="post">
+                <input type="button" value="Add A Model">
+            </form>
+            
+            <form action="/CarModelHandler" method="patch">
+                <input type="button" value="Edit A Model">
+            </form>
+            
+            <form action="/CarModelHandler" method="delete">
+                <input type="button" value="Remove A Model">
+            </form>
+            
+        </div>
+    </div>
+    </div>
+</body>
+</html>
