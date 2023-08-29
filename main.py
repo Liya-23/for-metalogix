@@ -31,12 +31,7 @@ Base.metadata.create_all(engine)
 # Create a session to interact with the database
 Session = sessionmaker(bind=engine)
 session = Session()
-
-# Registry Handling
-# class MainHandler(tornado.web.RequestHandler):
-#     def get(self):
-#         self.render("register.html")
-
+# registration handler
 class RegistrationHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("register.html")
@@ -58,10 +53,6 @@ class RegistrationHandler(tornado.web.RequestHandler):
             self.write("Registration successful")
 
 # Login handling
-# class secMainHandler(tornado.web.RequestHandler):
-#     def get(self):
-#         self.render("login.html")
-
 class LoginHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("login.html")
@@ -77,22 +68,6 @@ class LoginHandler(tornado.web.RequestHandler):
 
         else:
             self.write("Invalid username or password")
-
-# car models Handler
-# car_models = {}
-# engine2 = create_engine('sqlite:///models.db', echo=True)
-
-#textfile reading
-# class TabSepFR:
-        # def print_formatted_data(self):
-        # # for row in self.data_array:
-            # print("\t".join([f"{key}: {value}" for key, value in row.items()]))
-            # print("-" * 30)
-
-# models handler
-# class thirdMainhandler(tornado.web.RequestHandler):
-#     def get(self):
-#         self.render("index.html")
 
 class CarModelsHandler(tornado.web.RequestHandler):
     def get(self):
@@ -155,9 +130,6 @@ class CarModelsHandler(tornado.web.RequestHandler):
         
 def make_app():
     return tornado.web.Application([
-        (r"/", MainHandler),
-        (r"/l", secMainHandler),
-        (r"/db", thirdMainhandler),
         (r"/register", RegistrationHandler),
         (r"/login", LoginHandler),
         (r"/findex", CarModelsHandler)
