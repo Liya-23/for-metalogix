@@ -4,6 +4,7 @@ import tornado.web
 from sqlalchemy import create_engine, Column, String, Integer, CHAR
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import warnings
 
 # Create the SQLite database for user registration
 engine = create_engine('sqlite:///users.db', echo=True)
@@ -24,7 +25,28 @@ class User(Base):
     def __repr__(self):
         return f"({self.accNum}) {self.firstname} {self.lastname} {self.username} {self.password}"
 
+# Create the SQLite database for car models
+engine_two = create_engine('sqlite:///models.db', echo=True)
+# Create a second base class for declarative class definitions
+sec_base = declarative_base()
+# Define the models class
+class models(sec_base):
+    __tablename__ = "models"
+    
+    ID = Column("id",Integer, primary_key = True)
+    manifacture = Column("manifacture",String)
+    model = Column("model",String)
+    releaseyear = Column("releaseyear",String)
+    enginetype = Column("enginetype",String)
+    horsepower = Column("horsepower",String)
+    transmission = Column("transmission",String)
+    exteriorcolor = Column("exteriorcolor",String)
+    interiorcolor = Column("interiorcolor",String)
+    wheelcolor = Column("wheelcolor",String)
+    price = Column("price",String)
 
+    def __repr__(self):
+        return f"({self.ID} {self.manifacture} {self.model} {self.releaseyear} {self.enginetype} {self.horsepower} {self.transmission} {self.exteriorcolor} {self.interiorcolor} {self.wheelcolor} {self.price})" 
 # Create the table in the database
 Base.metadata.create_all(engine)
 
@@ -85,8 +107,9 @@ class CarModelsHandler(tornado.web.RequestHandler):
                 values = line.strip().split("\t")
                 row_dict = dict(zip(headings, values))
                 self.data_array.append(row_dict)
-
+                return data_array
     def get_data(self):
+        read_file(data_array)
         info = self.data_array
         self.render("index.html", data=info)
     
@@ -132,7 +155,7 @@ def make_app():
     return tornado.web.Application([
         (r"/register", RegistrationHandler),
         (r"/login", LoginHandler),
-        (r"/findex", CarModelsHandler)
+        (r"/index", CarModelsHandler)
     ])
 
 

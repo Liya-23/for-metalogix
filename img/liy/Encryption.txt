@@ -1,0 +1,39 @@
+procedure TForm2.btnSendClick(Sender: TObject);
+var
+  ii: integer;
+begin
+  sText := edtText.Text;
+  lblText.Caption := sText;
+
+  begin
+    sNew := '';
+    sText := edtText.Text;
+    assignFile(tf, 'Cipher.txt');
+    if fileExists('Cipher.txt') <> true then
+    begin
+      showMessage('No file');
+      exit;
+    end;
+
+    begin
+      assignFile(tf, 'Cipher.txt');
+      for ii := 1 to length(sText) do
+      begin
+        sNew := sText[i];
+        reset(tf);
+        while not eof(tf) do
+        begin
+          readLn(tf, sLine);
+          if sNew = sLine[1] then
+          begin
+            sNew := sNew + copy(sLine, 3);
+          end;
+        end;
+        closeFile(tf);
+      end;
+      lblText.Caption := sText;
+    end;
+  end;
+end;
+
+end.
