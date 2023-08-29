@@ -4,7 +4,6 @@ import tornado.web
 from sqlalchemy import create_engine, Column, String, Integer, CHAR
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import reader # imports the file reader.py
 
 # Create the SQLite database for user registration
 engine = create_engine('sqlite:///users.db', echo=True)
@@ -78,7 +77,18 @@ class LoginHandler(tornado.web.RequestHandler):
 # engine2 = create_engine('sqlite:///models.db', echo=True)
 
 #textfile reading
-class TabSepFR:
+# class TabSepFR:
+        # def print_formatted_data(self):
+        # # for row in self.data_array:
+            # print("\t".join([f"{key}: {value}" for key, value in row.items()]))
+            # print("-" * 30)
+
+# models handler
+class thirdMainhandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.html")
+
+class CarModelsHandler(tornado.web.RequestHandler):
     def __init__(self, file_path):
         self.file_path = file_path
         self.data_array = []
@@ -93,19 +103,9 @@ class TabSepFR:
                 self.data_array.append(row_dict)
 
     def get_data(self):
-        return self.data_array
-
-    # def print_formatted_data(self):
-        # # for row in self.data_array:
-            # print("\t".join([f"{key}: {value}" for key, value in row.items()]))
-            # print("-" * 30)
-
-# models handler
-class thirdMainhandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("index.html", data = None)
-
-class CarModelsHandler(tornado.web.RequestHandler):
+        info = data_array
+        self.render("index.html", data=info)
+    
     def initialize(self, data_array):  # Initialize the handler with the data array
         self.data_array = data_array
         
@@ -144,7 +144,7 @@ class CarModelsHandler(tornado.web.RequestHandler):
             self.write("Invalid model index")
 
         
-def make_app(data_array):
+def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/l", secMainHandler),
@@ -152,13 +152,13 @@ def make_app(data_array):
         (r"/register", RegistrationHandler),
         (r"/login", LoginHandler),
         (r"/findex", CarModelsHandler)
-    ], **{"data_array": self.data_array})
+    ])
 
 
 if __name__ == "__main__":
     file_path = "carmodels db.txt" 
-    reader = TabSepFR(file_path)
-    reader.read_file()
+    # reader = TabSepFR(file_path)
+    # reader.read_file()
     # reader.print_formatted_data() 
     app = make_app()
     app.listen(2040)
