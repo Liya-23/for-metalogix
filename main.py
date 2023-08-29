@@ -33,11 +33,14 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 # Registry Handling
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("register.html")
+# class MainHandler(tornado.web.RequestHandler):
+#     def get(self):
+#         self.render("register.html")
 
 class RegistrationHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("register.html")
+        
     def post(self):
         firstname = self.get_argument("firstname")
         lastname = self.get_argument("lastname")
@@ -55,11 +58,14 @@ class RegistrationHandler(tornado.web.RequestHandler):
             self.write("Registration successful")
 
 # Login handling
-class secMainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("login.html")
+# class secMainHandler(tornado.web.RequestHandler):
+#     def get(self):
+#         self.render("login.html")
 
 class LoginHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("login.html")
+        
     def post(self):
         username = self.get_argument("userrname")
         password = self.get_argument("passsword")
@@ -84,11 +90,14 @@ class LoginHandler(tornado.web.RequestHandler):
             # print("-" * 30)
 
 # models handler
-class thirdMainhandler(tornado.web.RequestHandler):
-    def get(self):
-        self.render("index.html")
+# class thirdMainhandler(tornado.web.RequestHandler):
+#     def get(self):
+#         self.render("index.html")
 
 class CarModelsHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.html")
+        
     def __init__(self, file_path):
         self.file_path = file_path
         self.data_array = []
@@ -103,7 +112,7 @@ class CarModelsHandler(tornado.web.RequestHandler):
                 self.data_array.append(row_dict)
 
     def get_data(self):
-        info = data_array
+        info = self.data_array
         self.render("index.html", data=info)
     
     def initialize(self, data_array):  # Initialize the handler with the data array

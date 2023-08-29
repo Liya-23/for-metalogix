@@ -33,9 +33,9 @@
         label, input {
             display: block;
         }
-
+/* style="width: 95%;" */
         input {
-            width: 100%;
+            width: 95%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -85,7 +85,9 @@
             <div class="form-group">
                 <button type="submit">Login</button>
             </div>
-            <p><a href="register.html">don't have an account?</a></p>
+            <form action="/register.html" method="MainHandler">
+                <input type="button" value="don't have an account?">
+            </form>    
         </form>
 
     </div>
