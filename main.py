@@ -1,10 +1,16 @@
 # handle all imports needed
 import tornado.ioloop
 import tornado.web
+# has data typesy to declare columns with
 from sqlalchemy import create_engine, Column, String, Integer, CHAR
+#this would be used to create databases 
 from sqlalchemy.ext.declarative import declarative_base
+#also would be used to create databases 
 from sqlalchemy.orm import sessionmaker
+# helps capture warnings 
 import warnings
+# this library will be used to encrypt passwords  
+import bcrypt 
 
 # Create the SQLite database for user registration
 engine = create_engine('sqlite:///users.db', echo=True)
@@ -14,25 +20,30 @@ Base = declarative_base()
 
 # Define the User class
 class User(Base):
+    # name the table name
     __tablename__ = "accounts"
-    
+    # list of columns in the table
     accNum = Column("accNum", Integer, primary_key = True)
     firstname = Column("firstname", String)
     lastname = Column("lastname", String)
     username = Column("username", String)
     password = Column("password", String)
 
+    # Show how will the data be written to the data base
     def __repr__(self):
-        return f"({self.accNum}) {self.firstname} {self.lastname} {self.username} {self.password}"
+        return f"({self.accNum}) {self.firstname} {self.lastname} {self.username} {self.password})"
 
 # Create the SQLite database for car models
 engine_two = create_engine('sqlite:///models.db', echo=True)
+
 # Create a second base class for declarative class definitions
 sec_base = declarative_base()
+
 # Define the models class
 class models(sec_base):
+    # name the table name
     __tablename__ = "models"
-    
+    # list of columns in the table
     ID = Column("id",Integer, primary_key = True)
     manifacture = Column("manifacture",String)
     model = Column("model",String)
@@ -45,52 +56,70 @@ class models(sec_base):
     wheelcolor = Column("wheelcolor",String)
     price = Column("price",String)
 
+    # Show how will the data be written to the data base
     def __repr__(self):
         return f"({self.ID} {self.manifacture} {self.model} {self.releaseyear} {self.enginetype} {self.horsepower} {self.transmission} {self.exteriorcolor} {self.interiorcolor} {self.wheelcolor} {self.price})" 
-# Create the table in the database
+
+# Create the table in the database # Create an Alchemy/ declarativebase
 Base.metadata.create_all(engine)
 
 # Create a session to interact with the database
 Session = sessionmaker(bind=engine)
 session = Session()
-# registration handler
+
+# registration handler, handles everythin concerning the registration html file such as user's names, surnames, username and passwords 
 class RegistrationHandler(tornado.web.RequestHandler):
+    # retrieve the register html file needed for this class
     def get(self):
         self.render("register.html")
-        
+    # get all inputs from users    
     def post(self):
         firstname = self.get_argument("firstname")
         lastname = self.get_argument("lastname")
         username = self.get_argument("username")
         password = self.get_argument("password")
+        password_conf = self.get_argument("password-confirm")
 
+        # create a vrible that will search by usersnames 
         existing_user = session.query(User).filter_by(username=username).first()
-
+        # the variable will be used to verify if the new username provided does not correspond with some usernames already captured/registered
         if existing_user:
             self.write("Username already exists")
         else:
-            new_user = User(firstname=firstname, lastname=lastname, username=username, password=password)
-            session.add(new_user)
-            session.commit()
-            self.write("Registration successful")
+            # for the passwords: the password inputs should correspond with each other so the code below justifies just that
+            if password == password_conf:
+                hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+                new_user = User(firstname=firstname, lastname=lastname, username=username, password=hashed_password)
+                session.add(new_user)
+                session.commit()
+                self.write("Registration successful")
+                self.render("login.html")
+            else:
+                # else if the passwords arent, the user must re enter the correct one 
+                self.write("the password you provided is incorrect")
+                self.render("register.html")    
 
 # Login handling
 class LoginHandler(tornado.web.RequestHandler):
+    # retrieve the register html file needed for this class
     def get(self):
         self.render("login.html")
-        
+    
+    # get all inputs from users        
     def post(self):
-        username = self.get_argument("userrname")
-        password = self.get_argument("passsword")
+        username = self.get_argument("username")
+        password = self.get_argument("password")
 
         user = session.query(User).filter_by(username=username, password=password).first()
 
-        if user:
+        if user and bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
             self.write(f"Welcome {user.username}!")
-
+            self.render("index.html")
         else:
             self.write("Invalid username or password")
-
+            self.render("login.html") 
+            
+# car model handling 
 class CarModelsHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html")
