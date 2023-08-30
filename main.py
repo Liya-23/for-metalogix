@@ -107,18 +107,17 @@ class LoginHandler(tornado.web.RequestHandler):
     
     # get all inputs from users        
     def post(self):
-        username = self.get_argument("userrname")
-        password = self.get_argument("passsword")
-        #  find a way to hash the password provided in the login form then compare it to the other to get the results aimed for
-        user = session.query(User).filter_by(username=username).first()
-        # bcrypt.checkpw(password.encode(), user.password.encode())
-        hashed_user_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
-        if user and hashed_user_password == hashed_password:
+        nameuser = self.get_argument("nameuser")
+        wordpass = self.get_argument("wordpass")  # Use the correct variable name here
+        
+        user = session.query(User).filter_by(username=nameuser).first()
+        
+        if user and bcrypt.checkpw(wordpass.encode("utf-8"), user.password):
             self.write(f"Welcome {user.username}!")
             self.render("index.html")
         else:
             self.write("Invalid username or password")
-            self.render("login.html") 
+            self.render("login.html")
             
 # car model handling 
 class CarModelsHandler(tornado.web.RequestHandler):
@@ -137,7 +136,7 @@ class CarModelsHandler(tornado.web.RequestHandler):
                 values = line.strip().split("\t")
                 row_dict = dict(zip(headings, values))
                 self.data_array.append(row_dict)
-                return data_array
+            return data_array
     def get_data(self):
         read_file(data_array)
         info = self.data_array
