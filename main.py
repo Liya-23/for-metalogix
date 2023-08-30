@@ -88,7 +88,7 @@ class RegistrationHandler(tornado.web.RequestHandler):
         else:
             # for the passwords: the password inputs should correspond with each other so the code below justifies just that
             if password == password_conf:
-                hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+                hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
                 new_user = User(firstname=firstname, lastname=lastname, username=username, password=hashed_password)
                 session.add(new_user)
                 session.commit()
@@ -107,12 +107,13 @@ class LoginHandler(tornado.web.RequestHandler):
     
     # get all inputs from users        
     def post(self):
-        username = self.get_argument("username")
-        password = self.get_argument("password")
-
-        user = session.query(User).filter_by(username=username, password=password).first()
-
-        if user and bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8")):
+        username = self.get_argument("userrname")
+        password = self.get_argument("passsword")
+        #  find a way to hash the password provided in the login form then compare it to the other to get the results aimed for
+        user = session.query(User).filter_by(username=username).first()
+        # bcrypt.checkpw(password.encode(), user.password.encode())
+        hashed_user_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
+        if user and hashed_user_password == hashed_password:
             self.write(f"Welcome {user.username}!")
             self.render("index.html")
         else:
