@@ -146,17 +146,24 @@ class CarModelsHandler(tornado.web.RequestHandler):
         self.data_array = data_array
         
     def post(self):
-        new_model = self.get_argument("new_model")
-        new_make = self.get_argument("new_make")
-        new_year = self.get_argument("new_year")
+        new_ID = self.get_argument("ID")
+        new_manifacture = self.get_argument("manifacture")
+        new_model = self.get_argument("model")
+        new_releaseyear = self.get_argument("releaseyear")
+        new_enginetype = self.get_argument("enginetype")
+        new_horsepower = self.get_argument("horsepower")
+        new_transmission = self.get_argument("transmission")
+        new_exteriorcolor = self.get_argument("exteriorcolor")
+        new_interiorcolor = self.get_argument("interiorcolor")
+        new_wheelcolor = self.get_argument("wheelcolor")
+        new_price = self.get_argument("price")
 
-        new_model_data = {'Model': new_model, 'Make': new_make, 'Year': new_year}
+        new_model_data = {'ID': new_ID, 'maifacture':new_manifacture, 'model':new_model, 'releaseyear': new_releaseyear, 'enginetype': new_enginetype, 'horsepower':new_horsepower,'transmission': new_transmission, 'exteriorcolor': new_exteriorcolor, 'interiorcolor': new_interiorcolor, 'wheelcolor': new_wheelcolor, 'price': new_price}
         self.data_array.append(new_model_data)
         self.write("New model added successfully")
-    
+        return data_array
     def get(self):
-        dbdis_content = "\n".join([f"{item['Model']} - {item['Make']} - {item['Year']}" for item in self.data_array])
-        self.render("index.html", dbdis_content=dbdis_content)
+        print(data_array)
 
     def delete(self):
         model_index = int(self.get_argument("model_index"))
