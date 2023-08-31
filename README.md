@@ -11,6 +11,7 @@ The purpose of this project is to offer a flexible and user-friendly API for CRU
 
 Setup and Installation
 Requirements:
+
 Before you begin, ensure you have the following installed:
 Python (version 3.11.5)
 Pip package manager
