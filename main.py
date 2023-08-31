@@ -175,11 +175,14 @@ class CarModelsHandler(tornado.web.RequestHandler):
             self.write("Invalid model index")
         
     def patch(self):
-        model_index = int(self.get_argument("model_index"))
+        model_index = int(self.get_argument("ID"))
         new_make = self.get_argument("new_make")
         new_year = self.get_argument("new_year")
 
         if 0 <= model_index < len(self.data_array):
+            #  get araguments from table contents/ edit button will popo u a modal dialog box used to edit idexes
+            # compare if data alredy there is it the same whit new data or not
+            # eg if oldcarmodel != newcar mode: ["car model"] = new car model 
             self.data_array[model_index]['Make'] = new_make
             self.data_array[model_index]['Year'] = new_year
             self.write("Model data updated successfully")
