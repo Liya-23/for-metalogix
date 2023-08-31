@@ -127,7 +127,7 @@ class CarModelsHandler(tornado.web.RequestHandler):
     def __init__(self, file_path):
         self.file_path = file_path
         self.data_array = []
-
+    # a function that reads data from a textfile to an array
     def read_file(self):
         with open(self.file_path, "r") as file:
             headings = file.readline().strip().split("\t")
@@ -138,6 +138,7 @@ class CarModelsHandler(tornado.web.RequestHandler):
                 self.data_array.append(row_dict)
             return data_array
     def get_data(self):
+        # works to view in the index file that displays the databases
         read_file(data_array)
         info = self.data_array
         self.render("index.html", data=info)
@@ -146,6 +147,7 @@ class CarModelsHandler(tornado.web.RequestHandler):
         self.data_array = data_array
         
     def post(self):
+        # work to aid add new roecords
         new_ID = self.get_argument("ID")
         new_manifacture = self.get_argument("manifacture")
         new_model = self.get_argument("model")
@@ -157,15 +159,18 @@ class CarModelsHandler(tornado.web.RequestHandler):
         new_interiorcolor = self.get_argument("interiorcolor")
         new_wheelcolor = self.get_argument("wheelcolor")
         new_price = self.get_argument("price")
-
+        #create the line to be appended to array
         new_model_data = {'ID': new_ID, 'maifacture':new_manifacture, 'model':new_model, 'releaseyear': new_releaseyear, 'enginetype': new_enginetype, 'horsepower':new_horsepower,'transmission': new_transmission, 'exteriorcolor': new_exteriorcolor, 'interiorcolor': new_interiorcolor, 'wheelcolor': new_wheelcolor, 'price': new_price}
+        #append to array
         self.data_array.append(new_model_data)
         self.write("New model added successfully")
         return data_array
     def get(self):
+        #supposely works to display the whole data into the table
         print(data_array)
 
     def delete(self):
+        # Supposely t remove a model
         model_index = int(self.get_argument("model_index"))
 
         if 0 <= model_index < len(self.data_array):
@@ -175,6 +180,7 @@ class CarModelsHandler(tornado.web.RequestHandler):
             self.write("Invalid model index")
         
     def patch(self):
+        # supposedly to edit some infor about a model
         model_index = int(self.get_argument("ID"))
         new_make = self.get_argument("new_make")
         new_year = self.get_argument("new_year")
@@ -191,6 +197,7 @@ class CarModelsHandler(tornado.web.RequestHandler):
 
         
 def make_app():
+    #routes
     return tornado.web.Application([
         (r"/register", RegistrationHandler),
         (r"/login", LoginHandler),
@@ -200,9 +207,9 @@ def make_app():
 
 if __name__ == "__main__":
     file_path = "carmodels db.txt" 
-    # reader = TabSepFR(file_path)
-    # reader.read_file()
-    # reader.print_formatted_data() 
+    reader = TabSepFR(file_path)
+    reader.read_file()
+    reader.print_formatted_data() 
     app = make_app()
     app.listen(2040)
     tornado.ioloop.IOLoop.current().start()
